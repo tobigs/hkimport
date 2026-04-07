@@ -18,6 +18,7 @@
 		4C8BA00A1FB1EA45007C2D4F /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8BA0091FB1EA45007C2D4F /* HealthKit.framework */; };
 		4DFB0F17247DB00B00D61E7F /* HKWorkoutActivityType+Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFB0F16247DB00B00D61E7F /* HKWorkoutActivityType+Name.swift */; };
 		4DFB0F19247E164200D61E7F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFB0F18247E164200D61E7F /* Constants.swift */; };
+		AA0000012D000001008E4E84 /* DeviceStringParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000002D000001008E4E84 /* DeviceStringParser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,7 @@
 		4C8BA0091FB1EA45007C2D4F /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		4DFB0F16247DB00B00D61E7F /* HKWorkoutActivityType+Name.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HKWorkoutActivityType+Name.swift"; sourceTree = "<group>"; };
 		4DFB0F18247E164200D61E7F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		AA0000002D000001008E4E84 /* DeviceStringParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStringParser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -97,6 +99,7 @@
 				4C8B9FD21FB1D757007C2D4F /* AppDelegate.swift */,
 				4C8B9FDC1FB1D757007C2D4F /* Assets.xcassets */,
 				4DFB0F18247E164200D61E7F /* Constants.swift */,
+				AA0000002D000001008E4E84 /* DeviceStringParser.swift */,
 				4C8BA0071FB1EA45007C2D4F /* HKImport.entitlements */,
 				4DFB0F16247DB00B00D61E7F /* HKWorkoutActivityType+Name.swift */,
 				4C8BA0031FB1D921007C2D4F /* Importer.swift */,
@@ -272,6 +275,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4DFB0F19247E164200D61E7F /* Constants.swift in Sources */,
+				AA0000012D000001008E4E84 /* DeviceStringParser.swift in Sources */,
 				4DFB0F17247DB00B00D61E7F /* HKWorkoutActivityType+Name.swift in Sources */,
 				4C8BA0041FB1D921007C2D4F /* Importer.swift in Sources */,
 				4C8B9FD51FB1D757007C2D4F /* ViewController.swift in Sources */,
