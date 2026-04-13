@@ -32,6 +32,11 @@ class HealthRecord: CustomStringConvertible {
     var endDate: Date = Date()
     var creationDate: Date = Date()
 
+    // Source identity
+    var sourceName: String = ""
+    var sourceVersion: String?
+    var deviceString: String?
+
     // Workout data
     var activityType: HKWorkoutActivityType? = HKWorkoutActivityType(rawValue: 0)
     var totalEnergyBurned: Double = 0
@@ -106,6 +111,9 @@ class Importer: NSObject, XMLParserDelegate {
         currentRecord.type = attributeDict["type"]!
         currentRecord.value = Double(attributeDict["value"] ?? "0") ?? 0
         currentRecord.unit = attributeDict["unit"] ?? ""
+        currentRecord.sourceName = attributeDict["sourceName"] ?? ""
+        currentRecord.sourceVersion = attributeDict["sourceVersion"]
+        currentRecord.deviceString = attributeDict["device"]
         if let date = dateFormatter.date(from: attributeDict["startDate"]!) {
             currentRecord.startDate = date
         }
@@ -154,6 +162,9 @@ class Importer: NSObject, XMLParserDelegate {
         currentRecord.activityType = HKWorkoutActivityType.activityTypeFromString(attributeDict["workoutActivityType"] ?? "")
         currentRecord.value = Double(attributeDict["duration"] ?? "0") ?? 0
         currentRecord.unit = attributeDict["durationUnit"] ?? ""
+        currentRecord.sourceName = attributeDict["sourceName"] ?? ""
+        currentRecord.sourceVersion = attributeDict["sourceVersion"]
+        currentRecord.deviceString = attributeDict["device"]
         currentRecord.totalDistance = Double(attributeDict["totalDistance"] ?? "0") ?? 0
         currentRecord.totalDistanceUnit = attributeDict["totalDistanceUnit"] ??  ""
         currentRecord.totalEnergyBurned = Double(attributeDict["totalEnergyBurned"] ?? "0") ?? 0
@@ -218,6 +229,34 @@ class Importer: NSObject, XMLParserDelegate {
             return
         }
 
+        let parsed = item.deviceString.flatMap { DeviceStringParser.parse($0) }
+        let device: HKDevice? = parsed.map { parsed in
+            HKDevice(
+                name: parsed.name ?? item.sourceName,
+                manufacturer: parsed.manufacturer,
+                model: parsed.model,
+                hardwareVersion: parsed.hardwareVersion,
+                firmwareVersion: nil,
+                softwareVersion: parsed.softwareVersion,
+                localIdentifier: nil,
+                udiDeviceIdentifier: nil
+            )
+        }
+
+        var metadata = item.metadata
+        if !item.sourceName.isEmpty {
+            metadata = metadata ?? [String: Any]()
+            metadata?["HKImportOriginalSourceName"] = item.sourceName
+        }
+        if let sourceVersion = item.sourceVersion {
+            metadata = metadata ?? [String: Any]()
+            metadata?["HKImportOriginalSourceVersion"] = sourceVersion
+        }
+        if let deviceString = item.deviceString {
+            metadata = metadata ?? [String: Any]()
+            metadata?["HKImportOriginalDeviceString"] = deviceString
+        }
+
         let unit = HKUnit.init(from: item.unit!)
         let quantity = HKQuantity(unit: unit, doubleValue: item.value)
         var hkSample: HKSample?
@@ -227,7 +266,8 @@ class Importer: NSObject, XMLParserDelegate {
                 quantity: quantity,
                 start: item.startDate,
                 end: item.endDate,
-                metadata: item.metadata
+                device: device,
+                metadata: metadata
             )
         } else if let type = HKCategoryType.categoryType(forIdentifier: HKCategoryTypeIdentifier(rawValue: item.type)) {
             hkSample = HKCategorySample.init(
@@ -235,7 +275,8 @@ class Importer: NSObject, XMLParserDelegate {
                 value: Int(item.value),
                 start: item.startDate,
                 end: item.endDate,
-                metadata: item.metadata
+                device: device,
+                metadata: metadata
             )
         } else if item.type == HKObjectType.workoutType().identifier {
             let totalEnergyBurned = item.totalEnergyBurnedUnit == "" ? nil : HKQuantity(unit: HKUnit.init(from: item.totalEnergyBurnedUnit), doubleValue: item.totalEnergyBurned)
@@ -248,8 +289,8 @@ class Importer: NSObject, XMLParserDelegate {
                 duration: HKQuantity(unit: HKUnit.init(from: item.unit!), doubleValue: item.value).doubleValue(for: HKUnit.second()),
                 totalEnergyBurned: totalEnergyBurned,
                 totalDistance: totalDistance,
-                device: nil,
-                metadata: item.metadata
+                device: device,
+                metadata: metadata
             )
         } else if Constants.loggingEnabled {
             os_log("Didn't catch this item: %@", item.description)
