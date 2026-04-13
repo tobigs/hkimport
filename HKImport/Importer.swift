@@ -243,13 +243,18 @@ class Importer: NSObject, XMLParserDelegate {
             )
         }
 
-        var metadata = item.metadata ?? [String: Any]()
-        metadata["HKImportOriginalSourceName"] = item.sourceName
+        var metadata = item.metadata
+        if !item.sourceName.isEmpty {
+            metadata = metadata ?? [String: Any]()
+            metadata?["HKImportOriginalSourceName"] = item.sourceName
+        }
         if let sourceVersion = item.sourceVersion {
-            metadata["HKImportOriginalSourceVersion"] = sourceVersion
+            metadata = metadata ?? [String: Any]()
+            metadata?["HKImportOriginalSourceVersion"] = sourceVersion
         }
         if let deviceString = item.deviceString {
-            metadata["HKImportOriginalDeviceString"] = deviceString
+            metadata = metadata ?? [String: Any]()
+            metadata?["HKImportOriginalDeviceString"] = deviceString
         }
 
         let unit = HKUnit.init(from: item.unit!)
