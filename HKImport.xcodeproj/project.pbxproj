@@ -258,7 +258,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if command -v swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, skipping linting\"\nfi\n";
+			shellScript = "PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\"\nSWIFTLINT=$(command -v swiftlint)\nif [ -n \"$SWIFTLINT\" ]; then\n  \"$SWIFTLINT\"\nelse\n  echo \"warning: SwiftLint not installed, skipping linting\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
