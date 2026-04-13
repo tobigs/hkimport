@@ -230,16 +230,18 @@ class Importer: NSObject, XMLParserDelegate {
         }
 
         let parsed = item.deviceString.flatMap { DeviceStringParser.parse($0) }
-        let device = HKDevice(
-            name: item.sourceName,
-            manufacturer: parsed?.manufacturer,
-            model: parsed?.model,
-            hardwareVersion: parsed?.hardwareVersion,
-            firmwareVersion: nil,
-            softwareVersion: parsed?.softwareVersion,
-            localIdentifier: nil,
-            udiDeviceIdentifier: nil
-        )
+        let device: HKDevice? = parsed.map { parsed in
+            HKDevice(
+                name: parsed.name ?? item.sourceName,
+                manufacturer: parsed.manufacturer,
+                model: parsed.model,
+                hardwareVersion: parsed.hardwareVersion,
+                firmwareVersion: nil,
+                softwareVersion: parsed.softwareVersion,
+                localIdentifier: nil,
+                udiDeviceIdentifier: nil
+            )
+        }
 
         var metadata = item.metadata ?? [String: Any]()
         metadata["HKImportOriginalSourceName"] = item.sourceName
