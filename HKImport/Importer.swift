@@ -69,6 +69,7 @@ class Importer: NSObject, XMLParserDelegate {
     var allSamples: [HKSample] = []
     var authorizedTypes: [HKSampleType: Bool] = [:]
     var readCount = 0
+    var insideCorrelation = false
     var currentRecord: HealthRecord = HealthRecord.init()
     var readCounterLabel: UILabel?
     var writeCounterLabel: UILabel?
@@ -94,9 +95,15 @@ class Importer: NSObject, XMLParserDelegate {
     }
 
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String: String]) {
+        if elementName == "Correlation" {
+            insideCorrelation = true
+            return
+        }
         if elementName == "Record" {
+            guard !insideCorrelation else { return }
             parseRecordFromAttributes(attributeDict)
         } else if elementName == "MetadataEntry" {
+            guard !insideCorrelation else { return }
             parseMetaDataFromAttributes(attributeDict)
         } else if elementName == "Workout" {
             parseWorkoutFromAttributes(attributeDict)
@@ -200,6 +207,11 @@ class Importer: NSObject, XMLParserDelegate {
     }
 
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+        if elementName == "Correlation" {
+            insideCorrelation = false
+            return
+        }
+        if insideCorrelation { return }
         if elementName == "Record" || elementName == "Workout" {
             readCount += 1
             if Constants.loggingEnabled {
