@@ -229,4 +229,40 @@ struct HKImportTests {
         #expect(metadata[HKMetadataKeyDateOfEarliestDataUsedForEstimate] as? Date == expectedMetadataDate)
         #expect(metadata[HKMetadataKeyAppleDeviceCalibrated] as? Int == 1)
     }
+
+    @Test func correlation_nested_records_are_skipped() async throws {
+        // Apple's HealthKit export duplicates correlated records: each <Record> inside a
+        // <Correlation> also appears as a top-level <Record>. We must only import the
+        // top-level copy to avoid duplicates.
+        let xmlString = """
+<?xml version="1.0" encoding="UTF-8"?>
+<HealthData locale="en_US">
+ <Correlation type="HKCorrelationTypeIdentifierFood" sourceName="Testing" creationDate="2024-12-23 19:38:40 -0600" startDate="2024-12-23 19:00:00 -0600" endDate="2024-12-23 19:00:00 -0600">
+  <MetadataEntry key="HKFoodType" value="Should be ignored"/>
+  <Record type="HKQuantityTypeIdentifierDietaryFatSaturated" sourceName="Testing" unit="g" creationDate="2024-12-23 19:38:40 -0600" startDate="2024-12-23 19:00:00 -0600" endDate="2024-12-23 19:00:00 -0600" value="2.91379">
+   <MetadataEntry key="HKFoodBrandName" value="Should be ignored"/>
+  </Record>
+ </Correlation>
+ <Record type="HKQuantityTypeIdentifierDietaryFatSaturated" sourceName="Testing" unit="g" creationDate="2024-12-23 19:38:40 -0600" startDate="2024-12-23 19:00:00 -0600" endDate="2024-12-23 19:00:00 -0600" value="2.91379">
+  <MetadataEntry key="HKFoodBrandName" value="13 Chips"/>
+ </Record>
+</HealthData>
+"""
+        let importer = Importer()
+        importer.authorizedTypes = [HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryFatSaturated)!: true]
+
+        let parser = XMLParser(data: xmlString.data(using: .utf8)!)
+        parser.delegate = importer
+        parser.parse()
+
+        // Only the top-level Record should be imported, not the one nested in <Correlation>.
+        try #require(importer.allSamples.count == 1)
+
+        // swiftlint:disable:next force_cast
+        let sample = importer.allSamples[0] as! HKQuantitySample
+        let metadata = sample.metadata!
+
+        // The imported sample should have the top-level record's metadata, not the nested one.
+        #expect(metadata["HKFoodBrandName"] as? String == "13 Chips")
+    }
 }
