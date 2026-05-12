@@ -41,10 +41,17 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FJO-Hx-4yB">
-                                <rect key="frame" x="146" y="318.5" width="83" height="30"/>
+                                <rect key="frame" x="146" y="298.5" width="83" height="30"/>
                                 <state key="normal" title="Start Import"/>
                                 <connections>
                                     <action selector="start:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XbE-HH-k9s"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GRM-IG-btn">
+                                <rect key="frame" x="121" y="348.5" width="133" height="30"/>
+                                <state key="normal" title="Import Garmin"/>
+                                <connections>
+                                    <action selector="importGarmin:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GRM-IG-act"/>
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="GXk-ob-zS4">
@@ -90,6 +97,7 @@ Not all HealthKit record types are fully supported.</string>
                     <connections>
                         <outlet property="readCounter" destination="7Q8-iE-G20" id="y4F-T5-R6c"/>
                         <outlet property="startButton" destination="FJO-Hx-4yB" id="wBJ-02-I4f"/>
+                        <outlet property="importGarminButton" destination="GRM-IG-btn" id="GRM-IG-out"/>
                         <outlet property="writeCounter" destination="WUh-M4-j3Z" id="3Hw-fO-SH7"/>
                     </connections>
                 </viewController>

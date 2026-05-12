@@ -11,10 +11,12 @@ import os.log
 
 class ViewController: UIViewController {
     @IBOutlet weak var startButton: UIButton!
+    @IBOutlet weak var importGarminButton: UIButton!
     @IBOutlet weak var readCounter: UILabel!
     @IBOutlet weak var writeCounter: UILabel!
 
     var dataImporter = Importer()
+    var garminImporter: GarminImporter?
 
     @IBAction func start(_ sender: Any) {
         let fileManager = FileManager.default
@@ -44,6 +46,17 @@ class ViewController: UIViewController {
             } else {
                 os_log("File not found")
             }
+        }
+    }
+
+    @IBAction func importGarmin(_ sender: Any) {
+        let importer = GarminImporter()
+        importer.readCounterLabel = readCounter
+        importer.writeCounterLabel = writeCounter
+        garminImporter = importer
+
+        importer.startImport {
+            os_log("Garmin import completed")
         }
     }
 }
