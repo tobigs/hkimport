@@ -37,6 +37,10 @@
 		CB55C9BE1373C0925BF20849 /* GarminHealthStatusRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7129544988F7CF832DB4DD47 /* GarminHealthStatusRecord.swift */; };
 		E6B98CADA9A07E2D385AB05A /* GarminActivityTypeMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C5460380D397A912233430E /* GarminActivityTypeMapper.swift */; };
 		E95F375A9F076B95D9D12072 /* GarminActivityRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = F95C62233F099294061513D0 /* GarminActivityRecord.swift */; };
+		BA001B001B001B001B001B00 /* GarminBiometricRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA001B001B001B001B001B01 /* GarminBiometricRecord.swift */; };
+		BA001C001C001C001C001C00 /* GarminNutritionRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA001C001C001C001C001C01 /* GarminNutritionRecord.swift */; };
+		BA001D001D001D001D001D00 /* BiometricParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA001D001D001D001D001D01 /* BiometricParser.swift */; };
+		BA001E001E001E001E001E00 /* NutritionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA001E001E001E001E001E01 /* NutritionParser.swift */; };
 		DC001A001A001A001A001A00 /* DI_CONNECT in Resources */ = {isa = PBXBuildFile; fileRef = DC001A001A001A001A001A01 /* DI_CONNECT */; };
 /* End PBXBuildFile section */
 
@@ -85,6 +89,10 @@
 		F853A1199B942744DE2B5365 /* GarminHydrationRecord.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GarminHydrationRecord.swift; sourceTree = "<group>"; };
 		F95C62233F099294061513D0 /* GarminActivityRecord.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GarminActivityRecord.swift; sourceTree = "<group>"; };
 		DC001A001A001A001A001A01 /* DI_CONNECT */ = {isa = PBXFileReference; lastKnownFileType = folder; name = DI_CONNECT; path = "Data/32c64d34-fafa-45dc-9e69-e6275ced46f5_1/DI_CONNECT"; sourceTree = SOURCE_ROOT; };
+		BA001B001B001B001B001B01 /* GarminBiometricRecord.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GarminBiometricRecord.swift; sourceTree = "<group>"; };
+		BA001C001C001C001C001C01 /* GarminNutritionRecord.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GarminNutritionRecord.swift; sourceTree = "<group>"; };
+		BA001D001D001D001D001D01 /* BiometricParser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BiometricParser.swift; sourceTree = "<group>"; };
+		BA001E001E001E001E001E01 /* NutritionParser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NutritionParser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -186,6 +194,8 @@
 				467D8DE2AFB40CA06813B155 /* GarminVO2MaxRecord.swift */,
 				F95C62233F099294061513D0 /* GarminActivityRecord.swift */,
 				F853A1199B942744DE2B5365 /* GarminHydrationRecord.swift */,
+				BA001B001B001B001B001B01 /* GarminBiometricRecord.swift */,
+				BA001C001C001C001C001C01 /* GarminNutritionRecord.swift */,
 			);
 			name = Models;
 			path = Models;
@@ -201,6 +211,8 @@
 				5AEC4ED0B8188897038C5574 /* VO2MaxParser.swift */,
 				5004D96C8C2A0C9DDF25EF40 /* ActivityParser.swift */,
 				B9DE97638609595458C33807 /* HydrationParser.swift */,
+				BA001D001D001D001D001D01 /* BiometricParser.swift */,
+				BA001E001E001E001E001E01 /* NutritionParser.swift */,
 			);
 			name = Parsers;
 			path = Parsers;
@@ -391,6 +403,10 @@
 				6BE10E7AFF99648FB4795B52 /* VO2MaxParser.swift in Sources */,
 				6557A3F33102CE1943075BE1 /* ActivityParser.swift in Sources */,
 				A1E9A81813279EF909D25E45 /* HydrationParser.swift in Sources */,
+				BA001B001B001B001B001B00 /* GarminBiometricRecord.swift in Sources */,
+				BA001C001C001C001C001C00 /* GarminNutritionRecord.swift in Sources */,
+				BA001D001D001D001D001D00 /* BiometricParser.swift in Sources */,
+				BA001E001E001E001E001E00 /* NutritionParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

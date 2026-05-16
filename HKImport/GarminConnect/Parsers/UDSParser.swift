@@ -62,10 +62,9 @@ struct UDSParser: GarminParser {
             samples.append(sample)
         }
 
-        // DistanceWalkingRunning (centimeters → kilometers)
-        // Despite the field name "totalDistanceMeters", the values are in centimeters.
-        if let distanceCM = record.totalDistanceMeters, distanceCM > 0 {
-            let km = Double(distanceCM) / 100_000.0
+        // DistanceWalkingRunning (meters → kilometers)
+        if let distanceMeters = record.totalDistanceMeters, distanceMeters > 0 {
+            let km = Double(distanceMeters) / 1_000.0
             let quantity = HKQuantity(unit: .meterUnit(with: .kilo), doubleValue: km)
             let sample = HKQuantitySample(
                 type: HKQuantityType.quantityType(forIdentifier: .distanceWalkingRunning)!,
@@ -106,8 +105,8 @@ struct UDSParser: GarminParser {
             samples.append(sample)
         }
 
-        // RestingHeartRate (from minAvgHeartRate)
-        if let restingHR = record.minAvgHeartRate, restingHR > 0 {
+        // RestingHeartRate (Garmin's 7-day rolling average)
+        if let restingHR = record.restingHeartRate, restingHR > 0, restingHR < 120 {
             let unit = HKUnit.count().unitDivided(by: .minute())
             let quantity = HKQuantity(unit: unit, doubleValue: Double(restingHR))
             let sample = HKQuantitySample(

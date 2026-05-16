@@ -40,6 +40,8 @@ class GarminImporter {
         if let t = HKQuantityType.quantityType(forIdentifier: .heartRateVariabilitySDNN) { types.insert(t) }
         if let t = HKQuantityType.quantityType(forIdentifier: .vo2Max) { types.insert(t) }
         if let t = HKQuantityType.quantityType(forIdentifier: .dietaryWater) { types.insert(t) }
+        if let t = HKQuantityType.quantityType(forIdentifier: .bodyMass) { types.insert(t) }
+        if let t = HKQuantityType.quantityType(forIdentifier: .dietaryEnergyConsumed) { types.insert(t) }
         // Category types
         if let t = HKCategoryType.categoryType(forIdentifier: .sleepAnalysis) { types.insert(t) }
         // Workout type
@@ -190,6 +192,18 @@ class GarminImporter {
                                       suffix: "_summarizedActivities.json")
         let activitySamples = parseFiles(files: activityFiles, parser: ActivityParser())
         allSamples.append(contentsOf: activitySamples)
+
+        // Body Weight (userBioMetrics)
+        let biometricFiles = findFiles(in: diConnect.appendingPathComponent("DI-Connect-Wellness"),
+                                       suffix: "_userBioMetrics.json")
+        let biometricSamples = parseFiles(files: biometricFiles, parser: BiometricParser())
+        allSamples.append(contentsOf: biometricSamples)
+
+        // Nutrition (nutritionLogs)
+        let nutritionFiles = findFiles(in: diConnect.appendingPathComponent("DI-Connect-Wellness"),
+                                       suffix: "_nutritionLogs.json")
+        let nutritionSamples = parseFiles(files: nutritionFiles, parser: NutritionParser())
+        allSamples.append(contentsOf: nutritionSamples)
 
         // Filter out samples for denied types
         let authorizedSamples = allSamples.filter { sample in

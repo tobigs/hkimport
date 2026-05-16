@@ -64,11 +64,6 @@ struct HealthStatusParser: GarminParser {
             guard let quantityType = HKQuantityType.quantityType(forIdentifier: .heartRateVariabilitySDNN) else { return nil }
             return (quantityType, .secondUnit(with: .milli), value)
 
-        case "HR":
-            guard let quantityType = HKQuantityType.quantityType(forIdentifier: .restingHeartRate) else { return nil }
-            let unit = HKUnit.count().unitDivided(by: .minute())
-            return (quantityType, unit, value)
-
         case "SPO2":
             guard let quantityType = HKQuantityType.quantityType(forIdentifier: .oxygenSaturation) else { return nil }
             return (quantityType, .percent(), value / 100.0)

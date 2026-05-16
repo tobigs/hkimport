@@ -40,9 +40,12 @@ struct ActivityParser: GarminParser {
             }
         }
 
-        // Distance: values in the export are unreliable (wrong units for indoor activities).
-        // Skip distance entirely to avoid importing garbage data.
-        let totalDistance: HKQuantity? = nil
+        // Distance in centimeters → kilometers
+        var totalDistance: HKQuantity?
+        if let distanceCM = record.distance, distanceCM > 0 {
+            let km = distanceCM / 100_000.0
+            totalDistance = HKQuantity(unit: .meterUnit(with: .kilo), doubleValue: km)
+        }
 
         // Custom metadata: activityType, activityId, name
         let additional: [String: Any] = [

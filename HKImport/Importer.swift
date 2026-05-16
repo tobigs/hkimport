@@ -143,7 +143,11 @@ class Importer: NSObject, XMLParserDelegate {
         } else if let date = dateFormatter.date(from: attributeValue) {
             value = date
         } else if let number = numberFormatter.number(from: attributeValue) {
-            value = number.intValue == Int(number.doubleValue) ? number.intValue : number.doubleValue
+            if let exact = Int(exactly: number.doubleValue.rounded(.towardZero)) {
+                value = exact
+            } else {
+                value = number.doubleValue
+            }
         } else {
             value = attributeValue
         }
@@ -222,9 +226,12 @@ class Importer: NSObject, XMLParserDelegate {
     func saveRecord(item: HealthRecord, withSuccess successBlock: @escaping () -> Void, failure failureBlock: @escaping () -> Void) {
         // HealthKit raises an exception if time between end and start date is > 345600
         let duration = item.endDate.timeIntervalSince(item.startDate)
-        if duration > 345600 ||
+        let intValue = Int(exactly: item.value.rounded(.towardZero))
+        if item.value.isNaN || item.value.isInfinite ||
+            intValue == nil ||
+            duration > 345600 ||
             (item.type == "HKQuantityTypeIdentifierHeadphoneAudioExposure" && duration < 0.001) ||
-            (item.type == "HKCategoryTypeIdentifierAudioExposureEvent" && Int(item.value) == 0) {
+            (item.type == "HKCategoryTypeIdentifierAudioExposureEvent" && intValue == 0) {
             failureBlock()
             return
         }
@@ -272,7 +279,7 @@ class Importer: NSObject, XMLParserDelegate {
         } else if let type = HKCategoryType.categoryType(forIdentifier: HKCategoryTypeIdentifier(rawValue: item.type)) {
             hkSample = HKCategorySample.init(
                 type: type,
-                value: Int(item.value),
+                value: intValue ?? 0,
                 start: item.startDate,
                 end: item.endDate,
                 device: device,
